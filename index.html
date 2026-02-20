@@ -1,336 +1,246 @@
 <!doctype html>
 <html lang="no">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dælenenga Cowboys sin Bislett-kalkulator</title>
-  <style>
-    :root{
-      --paper:#f4f0e6;
-      --ink:#1b1b1b;
-      --muted:#5a554c;
-      --line:#d8cfbf;
-      --shadow: 0 18px 50px rgba(0,0,0,.18);
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono";
-      --serif: ui-serif, "Georgia", "Times New Roman", Times, serif;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      min-height:100svh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: 22px 14px;
-      background:
-        radial-gradient(1200px 600px at 20% 10%, rgba(0,0,0,.05), transparent 55%),
-        radial-gradient(900px 500px at 80% 40%, rgba(0,0,0,.04), transparent 60%),
-        #e9e2d6;
-      color: var(--ink);
-    }
-    .card{
-      width: min(720px, 100%);
-      background: var(--paper);
-      border: 1px solid rgba(0,0,0,.12);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    header{
-      padding: 18px 18px 10px;
-      border-bottom: 1px dashed rgba(0,0,0,.18);
-    }
-    h1{
-      margin:0;
-      font-family: var(--serif);
-      font-size: 18px;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-    }
-    .sub{
-      margin:6px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
-      font-family: var(--mono);
-    }
-    .content{padding: 16px 18px 18px}
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    @media (max-width: 560px){
-      .row{grid-template-columns:1fr}
-    }
-    label{
-      display:block;
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-    input{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(0,0,0,.18);
-      background: rgba(255,255,255,.55);
-      font-family: var(--mono);
-      font-size: 14px;
-      outline:none;
-    }
-    input:focus{box-shadow: 0 0 0 5px rgba(0,0,0,.08)}
-    .btns{
-      display:flex;
-      gap: 10px;
-      flex-wrap:wrap;
-      margin-top: 10px;
-      align-items:center;
-    }
-    button{
-      border: 1px solid rgba(0,0,0,.18);
-      background: #fff;
-      padding: 10px 12px;
-      border-radius: 14px;
-      font-family: var(--mono);
-      cursor:pointer;
-    }
-    button:active{transform: translateY(1px)}
-    .tiny{
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-    .out{
-      margin-top: 14px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      display:grid;
-      gap: 10px;
-    }
-    .big{
-      font-family: var(--mono);
-      font-size: 28px;
-      line-height: 1.1;
-      letter-spacing: .5px;
-    }
-    .k{
-      font-family: var(--mono);
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-    .receipt{
-      margin-top: 8px;
-      border-top: 1px dashed rgba(0,0,0,.18);
-      padding-top: 10px;
-      font-family: var(--mono);
-      font-size: 12px;
-      white-space: pre;
-      color: var(--ink);
-    }
-    .error{
-      display:none;
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(150,0,0,.25);
-      background: rgba(200,0,0,.06);
-      color: #5b0000;
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-    footer{
-      padding: 12px 18px;
-      border-top: 1px dashed rgba(0,0,0,.18);
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap:wrap;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator for innebanen på Bislett</title>
+<style>
+  body{
+    font-family: monospace;
+    background:#f4f0e6;
+    color:#111;
+    padding:20px;
+    max-width:560px;
+    margin:auto;
+    line-height:1.35;
+  }
+  h1{font-size:22px; margin:0 0 14px}
+  .muted{color:#5a554c; font-size:12px; margin-bottom:18px}
+  .tabs{display:flex; gap:10px; margin:12px 0 18px}
+  .tab{
+    flex:1;
+    border:1px solid rgba(0,0,0,.25);
+    background:#fff;
+    padding:10px;
+    cursor:pointer;
+    font-family: monospace;
+    font-size:14px;
+  }
+  .tab.active{background:#111; color:#f4f0e6}
+  label{display:block; font-size:12px; color:#5a554c; margin:10px 0 6px}
+  input{
+    width:100%;
+    font-size:20px;
+    padding:10px;
+    font-family: monospace;
+    border:1px solid rgba(0,0,0,.25);
+    border-radius:10px;
+    background:rgba(255,255,255,.65);
+  }
+  button.main{
+    width:100%;
+    margin-top:14px;
+    font-size:18px;
+    padding:12px;
+    font-family: monospace;
+    border:1px solid rgba(0,0,0,.25);
+    border-radius:12px;
+    background:#fff;
+    cursor:pointer;
+  }
+  .result{
+    margin-top:18px;
+    border-top:1px dashed rgba(0,0,0,.35);
+    padding-top:14px;
+  }
+  .big{font-size:30px; margin:8px 0}
+  .small{font-size:12px; color:#5a554c}
+  .splits{
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(0,0,0,.25);
+    font-size: 12px;
+    white-space: pre;
+  }
+  .error{
+    margin-top:12px;
+    padding:10px;
+    border:1px solid rgba(150,0,0,.25);
+    background:rgba(200,0,0,.06);
+    color:#5b0000;
+    border-radius:10px;
+    display:none;
+    font-size:12px;
+  }
+</style>
 </head>
 <body>
-  <main class="card">
-    <header>
-      <h1>Dælenenga Cowboys er bedre enn ABC</h1>
-      <p class="sub">Bruk vår kalkulator til å regne ut hvilke rundetider du må ha for å treffe på ønsket pace.</p>
-    </header>
 
-    <section class="content">
-      <div class="row">
-        <div>
-          <label>Antall runder</label>
-          <input id="laps" inputmode="numeric" value="8" />
-        </div>
-        <div>
-          <label>Pace (min/km)</label>
-          <input id="pace" value="4:15" placeholder="mm:ss (f.eks. 4:15)" />
-        </div>
-      </div>
+<h1>Kalkulator for innebanen på Bislett (546,5 m)</h1>
+<div class="muted">
+  Alle som bruker denne kalkulatoren elsker Dælenenga Cowboys</b>.
+</div>
 
-      <div class="btns">
-        <button id="calc">Regn ut</button>
-        <button id="copy">Kopier</button>
-        <button id="reset">Reset</button>
-        <span class="tiny">Enter = regn ut</span>
-      </div>
+<div class="tabs">
+  <button class="tab active" id="tabA" type="button">PACE → TID</button>
+  <button class="tab" id="tabB" type="button">TID → PACE</button>
+</div>
 
-      <div class="error" id="err"></div>
+<label>Antall runder</label>
+<input id="laps" value="1" inputmode="numeric" />
 
-      <div class="out" id="out" style="display:none;">
-        <div>
-          <div class="big" id="lapTime">—</div>
-          <div class="k">tid per runde</div>
-        </div>
-        <div>
-          <div class="big" id="totalTime">—</div>
-          <div class="k">totaltid</div>
-        </div>
+<div id="modeA">
+  <label>Pace (min/km)</label>
+  <input id="pace" value="4:00" placeholder="mm:ss" />
+</div>
 
-        <div class="receipt" id="receipt"></div>
-      </div>
-    </section>
+<div id="modeB" style="display:none;">
+  <label>Totaltid (mm:ss eller hh:mm:ss)</label>
+  <input id="totalIn" value="2:00" placeholder="mm:ss eller hh:mm:ss" />
+</div>
 
-    <footer>
-      <div>Tips: pace kan være <b>mm:ss</b> eller <b>4.25</b> (minutter)</div>
-      <div id="meta">Klar</div>
-    </footer>
-  </main>
+<button class="main" id="calc" type="button">REGN UT</button>
 
-  <script>
-    const LAP_KM = 0.5465;
+<div class="error" id="err"></div>
 
-    const $ = (s) => document.querySelector(s);
-    const lapsEl = $("#laps");
-    const paceEl = $("#pace");
-    const outEl = $("#out");
-    const errEl = $("#err");
-    const metaEl = $("#meta");
+<div class="result" id="out" style="display:none;">
+  <div class="big" id="line1">—</div>
+  <div class="big" id="line2">—</div>
+  <div class="small" id="line3">—</div>
+  <div class="splits" id="splitsText"></div>
+</div>
 
-    const lapTimeEl = $("#lapTime");
-    const totalTimeEl = $("#totalTime");
-    const receiptEl = $("#receipt");
+<script>
+const LAP_KM = 0.5465;
 
-    function setMeta(msg){
-      metaEl.textContent = msg;
-      clearTimeout(setMeta._t);
-      setMeta._t = setTimeout(() => metaEl.textContent = "Klar", 1400);
-    }
+const $ = (s) => document.querySelector(s);
 
-    function parsePaceToSecondsPerKm(input){
-      const s = (input || "").trim().replace(",", ".");
-      if (!s) return null;
+const tabA = $("#tabA");
+const tabB = $("#tabB");
+const modeA = $("#modeA");
+const modeB = $("#modeB");
 
-      if (s.includes(":")){
-        const [mmRaw, ssRaw] = s.split(":");
-        const mm = Number(mmRaw), ss = Number(ssRaw);
-        if (!Number.isFinite(mm) || !Number.isFinite(ss) || mm < 0 || ss < 0 || ss >= 60) return null;
-        return mm * 60 + ss;
-      }
+const lapsEl = $("#laps");
+const paceEl = $("#pace");
+const totalEl = $("#totalIn");
 
-      const minutes = Number(s);
-      if (!Number.isFinite(minutes) || minutes <= 0) return null;
-      return minutes * 60;
-    }
+const errEl = $("#err");
+const outEl = $("#out");
+const line1 = $("#line1");
+const line2 = $("#line2");
+const line3 = $("#line3");
+const splitsText = $("#splitsText");
 
-    function fmt(sec){
-      const s = Math.round(sec);
-      const mm = Math.floor(s / 60);
-      const ss = s % 60;
-      return `${mm}:${String(ss).padStart(2,"0")}`;
-    }
+let currentMode = "A";
 
-    function showError(msg){
-      errEl.style.display = "block";
-      errEl.textContent = msg;
-      outEl.style.display = "none";
-    }
+function showError(msg){
+  errEl.style.display = "block";
+  errEl.textContent = msg;
+  outEl.style.display = "none";
+}
 
-    function clearError(){
-      errEl.style.display = "none";
-      errEl.textContent = "";
-    }
+function clearError(){
+  errEl.style.display = "none";
+}
 
-    function buildReceipt(laps, lapSec){
-      const totalSec = lapSec * laps;
-      const distKm = laps * LAP_KM;
+function parseTimeToSeconds(input){
+  const parts = input.trim().split(":");
+  if(parts.length === 2){
+    return Number(parts[0])*60 + Number(parts[1]);
+  }
+  if(parts.length === 3){
+    return Number(parts[0])*3600 + Number(parts[1])*60 + Number(parts[2]);
+  }
+  return null;
+}
 
-      let lines = "";
-      lines += "— SPLITS —\n";
-      lines += `Runder: ${laps}\n`;
-      lines += `Distanse: ${distKm.toFixed(3)} km\n`;
-      lines += `Rundetid: ${fmt(lapSec)}\n`;
-      lines += `Totalt: ${fmt(totalSec)}\n`;
-      lines += "-------------------------\n";
-      lines += "Lap  |  Lap-tid |  Total\n";
+function formatSeconds(sec){
+  sec = Math.round(sec);
+  const h = Math.floor(sec/3600);
+  const m = Math.floor((sec%3600)/60);
+  const s = sec%60;
+  if(h>0) return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
 
-      for (let i = 1; i <= laps; i++){
-        const lap = String(i).padStart(3," ");
-        const lt  = fmt(lapSec).padStart(7," ");
-        const tot = fmt(i * lapSec).padStart(7," ");
-        lines += `${lap}  |  ${lt}  |  ${tot}\n`;
-      }
-      return lines.trimEnd();
-    }
+function formatPace(secPerKm){
+  secPerKm = Math.round(secPerKm);
+  const m = Math.floor(secPerKm/60);
+  const s = secPerKm%60;
+  return `${m}:${String(s).padStart(2,"0")}`;
+}
 
-    function calculate(){
-      clearError();
+function setMode(mode){
+  currentMode = mode;
+  tabA.classList.toggle("active", mode==="A");
+  tabB.classList.toggle("active", mode==="B");
+  modeA.style.display = mode==="A" ? "block" : "none";
+  modeB.style.display = mode==="B" ? "block" : "none";
+  outEl.style.display = "none";
+  splitsText.textContent = "";
+  clearError();
+}
 
-      const laps = Number(String(lapsEl.value).trim());
-      if (!Number.isInteger(laps) || laps <= 0) return showError("Antall runder må være et heltall > 0.");
+function buildSplits(laps, lapSec){
+  let txt = "";
+  txt += "Lap | Lap-tid | Total\n";
+  txt += "----+---------+---------\n";
+  for(let i=1;i<=laps;i++){
+    const lap = String(i).padStart(3," ");
+    const lt  = formatSeconds(lapSec).padStart(7," ");
+    const tot = formatSeconds(lapSec*i).padStart(8," ");
+    txt += `${lap} | ${lt} | ${tot}\n`;
+  }
+  return txt;
+}
 
-      const paceSecPerKm = parsePaceToSecondsPerKm(paceEl.value);
-      if (!Number.isFinite(paceSecPerKm) || paceSecPerKm <= 0) return showError("Pace må være mm:ss (f.eks. 4:15) eller 4.25 (minutter).");
+function calculate(){
+  clearError();
 
-      const lapSec = paceSecPerKm * LAP_KM;
-      const totalSec = lapSec * laps;
+  const laps = Number(lapsEl.value);
+  if(!Number.isInteger(laps) || laps<=0){
+    return showError("Antall runder må være heltall > 0.");
+  }
 
-      lapTimeEl.textContent = fmt(lapSec);
-      totalTimeEl.textContent = fmt(totalSec);
+  const distKm = laps * LAP_KM;
 
-      receiptEl.textContent = buildReceipt(laps, lapSec);
-      outEl.style.display = "grid";
+  if(currentMode==="A"){
+    const paceSec = parseTimeToSeconds(paceEl.value);
+    if(!paceSec) return showError("Pace må være mm:ss.");
 
-      setMeta("Oppdatert");
-    }
+    const lapSec = paceSec * LAP_KM;
+    const totalSec = lapSec * laps;
 
-    async function copy(){
-      if (outEl.style.display === "none") calculate();
-      if (outEl.style.display === "none") return;
+    line1.textContent = `Runde: ${formatSeconds(lapSec)}`;
+    line2.textContent = `Totalt: ${formatSeconds(totalSec)}`;
+    line3.textContent = `Distanse: ${distKm.toFixed(3)} km • Pace: ${formatPace(paceSec)} /km`;
 
-      const txt = receiptEl.textContent;
-      try{
-        await navigator.clipboard.writeText(txt);
-        setMeta("Kopiert");
-      } catch {
-        window.prompt("Kopier manuelt:", txt);
-      }
-    }
+    splitsText.textContent = buildSplits(laps, lapSec);
+  } else {
+    const totalSec = parseTimeToSeconds(totalEl.value);
+    if(!totalSec) return showError("Totaltid må være mm:ss eller hh:mm:ss.");
 
-    function reset(){
-      lapsEl.value = 8;
-      paceEl.value = "4:15";
-      outEl.style.display = "none";
-      clearError();
-      setMeta("Reset");
-      lapsEl.focus();
-    }
+    const paceSec = totalSec / distKm;
+    const lapSec = totalSec / laps;
 
-    $("#calc").addEventListener("click", calculate);
-    $("#copy").addEventListener("click", copy);
-    $("#reset").addEventListener("click", reset);
+    line1.textContent = `Pace: ${formatPace(paceSec)} /km`;
+    line2.textContent = `Runde: ${formatSeconds(lapSec)}`;
+    line3.textContent = `Distanse: ${distKm.toFixed(3)} km • Totalt: ${formatSeconds(totalSec)}`;
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") calculate();
-    });
+    splitsText.textContent = "";
+  }
 
-    // initial
-    calculate();
-  </script>
+  outEl.style.display = "block";
+}
+
+tabA.onclick = () => setMode("A");
+tabB.onclick = () => setMode("B");
+$("#calc").onclick = calculate;
+document.addEventListener("keydown", e => { if(e.key==="Enter") calculate(); });
+
+setMode("A");
+calculate();
+</script>
+
 </body>
 </html>
